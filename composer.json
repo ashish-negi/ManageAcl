@@ -1,0 +1,10 @@
+{
+    "name": "ashish-negi/manage-acl",
+    "type": "cakephp-plugin",
+    "description": "ManageAcl for CakePHP 2.x",
+    "homepage": "http://github.com/ashish-negi/ManageAcl",
+    "require": {
+        "php": ">=5.2.8",
+        "composer/installers": "*"
+    }
+}
