@@ -153,7 +153,8 @@ class AclController extends ManageAclAppController {
 
         $this->request->data = array('Perms' => $perms);
         $this->set('aroAlias', $Aro->alias);
-        $this->set('aroDisplayField', $Aro->displayField);
+        $aroDisplayField = Configure::read('ManageAcl.displayField');
+        $this->set('aroDisplayField', $aroDisplayField[$model]);
         $this->set(compact('acos', 'aros'));
     }
 	

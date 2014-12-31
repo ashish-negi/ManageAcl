@@ -38,6 +38,11 @@ Configure::write('ManageAcl.ignoreActions', array('isAuthorized'));
 Configure::write('ManageAcl.actionPermissions', array('_create' => 1, '_read' => 1, '_update' => 1, '_delete' => 1));
 
 /**
+ * display fields
+ */
+Configure::write('ManageAcl.displayField', array('User' => 'username', 'Group' => 'name'));
+
+/**
  * List of ARO models to load
  * Use only if ManageAcl.aros aliases are different than model name
  */
