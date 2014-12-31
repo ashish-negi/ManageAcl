@@ -3,29 +3,6 @@ App::uses('Component', 'Controller');
 
 Class CustomAclComponent extends Component {
 
-   /**
-    * Settings for authorize objects.
-    *
-    * - `actionPath` - The path to ACO nodes that contains the nodes for controllers. Used as a prefix
-    *    when calling $this->action();
-    * - `actionMap` - Action -> crud mappings. Used by authorization objects that want to map actions to CRUD roles.
-    * - `userModel` - Model name that ARO records can be found under. Defaults to 'User'.
-    *
-    * @var array
-    */
-    public $customSettings = array(
-            'actionPath' => 'controllers',
-            'actionMap' => array(
-                    'index' => 'read',
-                    'add' => 'create',
-                    'edit' => 'update',
-                    'view' => 'read',
-                    'delete' => 'delete',
-                    'remove' => 'delete'
-            ),
-            'userModel' => 'User'
-    );
-
     public function initialize(Controller $controller) {
         $this->controller = $controller;
     }
@@ -400,57 +377,5 @@ Class CustomAclComponent extends Component {
         app::uses('ArosAco', 'ManageAcl.Model');
         $acosArosObj = new ArosAco();
         return $acosArosObj->$executeAction($aro, $aco, $action); 
-    }
-    
-    /**
-    * Authorize a user using the CustomAclComponent.
-    * @param array $user The user to authorize
-    * @param CakeRequest $request The request needing authorization.
-    * @return bool
-    * @author Ashish Negi <ashish.negi@ucodesoft.com>
-    * @created 30-12-2014
-    */
-    public function authorizeRequest($user, CakeRequest $request) {
-        $user = array($this->customSettings['userModel'] => $user);
-        app::uses('ArosAco', 'ManageAcl.Model');
-        $acosArosObj = new ArosAco();
-        //if request is for plugin
-        if ($request->plugin == NULL && !empty($user)) {
-            return $acosArosObj->check($user, $this->action($request));
-        }
-        return true;
-    }
-    
-    /**
-    * Get the action path for a given request. Primarily used by authorize objects
-    * that need to get information about the plugin, controller, and action being invoked.
-    *
-    * @param CakeRequest $request The request a path is needed for.
-    * @param string $path Path format.
-    * @return string the action path for the given request.
-    */
-    public function action(CakeRequest $request, $path = '/:plugin/:controller/:action') {
-            $plugin = empty($request['plugin']) ? null : Inflector::camelize($request['plugin']) . '/';
-            $path = str_replace(
-                    array(':controller', ':action', ':plugin/'),
-                    array(Inflector::camelize($request['controller']), $request['action'], $plugin),
-                    $this->customSettings['actionPath'] . $path
-            );
-            $path = str_replace('//', '/', $path);
-            return trim($path, '/');
-    }
-    
-    /**
-     * Redirect to given url else throw not found exception
-     * @param type $url
-     * @throws NotFoundException
-     * @author Ashish Negi <ashish.negi@ucodesoft.com>
-     * @created 30-12-2014
-     */
-    public function redirectToErrorPage($url = NULL) {
-        if(empty($url)){
-            throw new NotFoundException();
-        }
-        $this->controller->redirect($url);
     }
 }
